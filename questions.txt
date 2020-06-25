@@ -90,7 +90,7 @@ Q: Mit welche Waffe zerstört Capt. Janeway die Phalanx des Fürsorgers?
 A: Tribolalt-Geschosse (Der Fürsorger S01E01)
 C: T
 
-Q: Nach was will die Voyager als erstes Suchen, nachdem die Reise nach Hause beginnt?
+Q: Nach was will die Voyager als erstes suchen, nachdem die Reise nach Hause beginnt?
 A: Der Fürsorger-Frau (Der Fürsorger S01E01)
 C: G
 
@@ -98,7 +98,7 @@ Q: Was sollen die Mitglieder der Voyager auf der Station des Fürsorgers unbedin
 A: Die Maiskolben (Der Fürsorger S01E01)
 C: M
 
-Q: Wegen was streite Belana Torres mit Lt. Carey bei ihrem ersten Auftritt im Maschinenraum
+Q: Wegen was streite Belana Torres mit Lt. Carey bei ihrem ersten Auftritt im Maschinenraum?
 A: Wegen des Energiegitters (Die Parallaxe S01E03)
 C: C
 
@@ -106,11 +106,11 @@ Q: Mit welchem Argument überzeugt Neelix Capt. Janeway bei den Meetings der Fü
 A: Er ist der höchste Talaxianer an Bord und Kess die höchste Okampa (Die Parallaxe S01E03)
 C: C
 
-Q: Welcher Kurs auf der Akademie bescherte Tom Paris seinen Zweitjob als Sanitätär.
+Q: Welcher Kurs auf der Akademie bescherte Tom Paris seinen Zweitjob als Sanitätär?
 A: Biochemie (Die Parallaxe S01E03)
 C: C
 
-Q: Unter was leiden die Mitglieder der Voyager unter dem Einfluss der Quantensingularität
+Q: Unter was leiden die Mitglieder der Voyager unter dem Einfluss der Quantensingularität?
 A: Kopfschmerzen, der Doktor schrumpft. (Die Parallaxe S01E03)
 C: M
 
@@ -134,11 +134,11 @@ Q: Wie hat Harry Kim den Geschwindigkeitsrekord für Einzelpiloten an der Akadem
 A: Gar nicht. (Subraumspalten S01E04)
 C: C
 
-Q: Was befand sich eigentlich an dem Ort, an dem Neelix die Komböse eingerichtet hat?
-A: Der Speiseraum des Captains
+Q: Was befand sich eigentlich an dem Ort, an dem Neelix die Kombüse eingerichtet hat?
+A: Der Speiseraum des Captains (Transplantationen S01E04)
 C: V
 
-Q: Welches ist die erste feindliche Spezies nach den Kazon Ugla auf die die Voyager trifft?
+Q: Welches ist die erste feindliche Spezies nach den Kazon Ogla auf die die Voyager trifft?
 A: Die Vidiianer (Transplantationen S01E04)
 C: S
 
@@ -154,19 +154,19 @@ Q: Was ist das zweite Hologramm, dass auf der Voyager aktiviert wird?
 A: Eine holographische Lunge für Neelix (Transplantationen S01E04)
 C: C
 
-Q: Welcher Charakter, der in allen 7 Staffeln mitspielt, taucht in den wenigsten Folgen auf?
+Q: Welcher Hauptcharakter, der in allen 7 Staffeln mitspielt, taucht in den wenigsten Folgen auf?
 A: Neelix (163)
 C: C
 
 Q: Welcher Charakter (Leutenant), der nicht zu den Hauptfiguren gehört, taucht als einziger in allen 7 Staffeln auf?
-A: Lieutenant Ayala
+A: Leutenant Ayala
 C: C
 
 Q: Welche drei Charaktere tauchen in allen Folgen auf?
 A: Capt. Janeway, Comm. Chakotay und Lt. Tom Paris
 C: C
 
-Q: Wie viele verschiedene Schauspieler spielten Naomi Wildman
+Q: Wie viele verschiedene Schauspieler spielten Naomi Wildman?
 A: 6 (3 x Säuglinge, Kleinkind, junges Mädchen, Erwachsen)
 C: C
 
@@ -195,19 +195,17 @@ A: 38 (Der mysteriöse Neben S01E05)
 C: V
 
 Q: Welches ist das erste Holodeckprogramm, das gezeigt wird?
-A: PARIS-3 Die Bar Chez Sandrine in Marseille (Der mysteriöse Neben S01E05)
+A: PARIS-3. Die Bar Chez Sandrine in Marseille (Der mysteriöse Neben S01E05)
 C: V
 
 Q: Welches Spiel wird gern im Chez Sandrine gespielt?
 A: Pool, nicht Billard! (Der mysteriöse Neben S01E05)
 C: V
 
-Q: Mit welchen Worten begrüßt der Doktor jenen, der ihn bei aktiviert?
+Q: Mit welchen Worten begrüßt der Doktor jenen, der ihn aktiviert?
 A: Bitte nennen Sie die Art des medizinischen Notfalls. (Der Fürsorger S01E01)
 C: C
 
 Q: Wo wurde das Programm des Doktors programmiert?
 A: Im Jupityer Station Holo Programming Center (Der mysteriöse Neben S01E05)
 C: C
-
-Q: 

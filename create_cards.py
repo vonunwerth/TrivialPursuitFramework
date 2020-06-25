@@ -29,8 +29,8 @@ with conn:
 
     card_count = 1
     while (True):
-        vorne = Image.open("./assets/vorne.png")
-        hinten = Image.open("./assets/hinten.png")
+        vorne = Image.open("assets/front_cat.png") # TODO durchgehend englisch
+        hinten = Image.open("assets/back_cat.png")
         dv = ImageDraw.Draw(vorne)
         dh = ImageDraw.Draw(hinten)
         y = 100
@@ -66,6 +66,6 @@ with conn:
                     y = y + 103
                     break
 
-        vorne.save("./out/vorne" + str(card_count) + ".png")
-        hinten.save("./out/hinten" + str(card_count) + ".png")
+        vorne.save("./out/front" + str(card_count) + ".png")
+        hinten.save("./out/back" + str(card_count) + ".png")
         card_count = card_count + 1

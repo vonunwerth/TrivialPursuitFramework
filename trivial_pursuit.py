@@ -132,8 +132,8 @@ fnt = ImageFont.truetype("arial.ttf", 25)
 # Fragenkarten als Bilder erstellen
 fragenkarte = 1
 for fragekarte in fragenkarten:  # 6er Bündel aus Allen
-    vorne = Image.open("./assets/vorne.png")
-    hinten = Image.open("./assets/hinten.png")
+    vorne = Image.open("assets/front.png")
+    hinten = Image.open("assets/back.png")
     dv = ImageDraw.Draw(vorne)
     dh = ImageDraw.Draw(hinten)
     y = 100
