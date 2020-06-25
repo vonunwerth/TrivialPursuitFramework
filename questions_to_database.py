@@ -43,7 +43,7 @@ for x in f:
     if qac_counter == 3: # TODO suhffle all questions, that those that are behind each other in the txt are not on the same card
         with conn: # Transaction
             try:
-                print create_qac(conn, (question, answer, category))
+                print "Frage: \033[1m" + question + " wurde als ID: " + str(create_qac(conn, (question, answer, category))) + "in die Datenbank eingetragen" # TODO englisch
             except sqlite3.IntegrityError: # Integrity Error, wenn Unique Frage bereits enthalten ist.
                 print "Frage: \033[1m" + question + "\033[0m wurde uebersprungen. Sie ist bereits in der Datenbank enthalten."
         qac_counter = 0
