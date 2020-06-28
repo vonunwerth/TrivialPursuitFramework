@@ -25,7 +25,7 @@ def count_questions():
 
 conn = create_connection("pythonsqlite.db")
 categories = ["C", "S", "T", "V", "G", "M"]  # TODO read from category file
-categories_long = ["Charaktere", "Spezies", "Technik", "Die Voyager", "Geschichte", "Aussenmissionen"]
+categories_long = ["Charaktere", "Spezies", "Trivia", "Die Voyager", "Geschichte", "Missionen"]
 with conn:
     numbers = []
     for category in categories:

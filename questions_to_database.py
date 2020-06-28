@@ -22,7 +22,7 @@ def create_qac(connection, qac):
 
 
 conn = create_connection("pythonsqlite.db")
-f = codecs.open("questions.txt", "r", "utf-8")
+f = codecs.open("questions/questions.txt", "r", "utf-8")
 
 question = ""
 answer = ""

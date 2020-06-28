@@ -10,7 +10,7 @@ class Question:
         self.category = category
 
 
-f = codecs.open("questions.txt", "r", "utf-8")
+f = codecs.open("questions/questions.txt", "r", "utf-8")
 
 fragen = []
 
