@@ -1,12 +1,18 @@
+import os
+import re
+import shutil
 import sqlite3
 
 from PIL import ImageFont, Image, ImageDraw
-
-from database_statistics import count_questions, database_statistics
+from database_statistics import count_questions, get_categories_from_file
 
 
 def create_connection(db_file):
-    """ create a database connection to a SQLite database """
+    """
+    Establishes a database connection
+    :param db_file: File of the database
+    :return: Successfull connection
+    """
     try:
         return sqlite3.connect(db_file)
     except sqlite3.Error as e:
@@ -14,21 +20,34 @@ def create_connection(db_file):
 
 
 def get_questions_of_categoriy(conn, category):
+    """
+    Gets all questions of a category from the database
+    :param conn: Database connection
+    :param category: Category of which questions will be retrieved
+    :return: Set of all questions with the category
+    """
     cur = conn.cursor()
     cur.execute("SELECT * FROM qac WHERE category=?", category)
     return cur.fetchall()  # Could also use dict_factory
 
 
 def create_cards():
-    conn = create_connection("python_sqlite.db")
+    """
+    Creates question cards filled with the questions provided by the database
+    :return: Returns when no new card can be created
+    """
+    if os.path.exists("out") and os.path.isdir("out"):
+        shutil.rmtree('out')  # Clean out folder
+    os.mkdir("out")  # create new out folder for result cards
+    conn = create_connection("python_sqlite.db")  # If not exist, create database, else establish a connection
     used_ids = []
     fnt = ImageFont.truetype("arial.ttf", 25)
     with conn:
-        categories, categories_long = database_statistics()
-
+        categories, categories_long = get_categories_from_file()
+        # TODO Write categories on blank front, back
         card_count = 1
         while True:
-            vorne = Image.open("assets/front_cat.png")  # TODO durchgehend englisch
+            vorne = Image.open("assets/front_cat.png")
             hinten = Image.open("assets/back_cat.png")
             dv = ImageDraw.Draw(vorne)
             dh = ImageDraw.Draw(hinten)
@@ -46,13 +65,17 @@ def create_cards():
                         return  # End scipt - cards have been created
                     if question_row[0] not in used_ids:
                         used_ids.append(question_row[0])
-                        question = question_row[1]
+                        question = question_row[
+                            1].strip()  # Get question and remove possible whitespace after questionsmark
                         answer = question_row[2]
-                        if len(question) > 60:
-                            line1 = question[
-                                    0:60]  # TODO finde das letzte Leerzeichen oder - vor dem 60. Zeichen um
-                            # Zeilenumbruch zu machen, ggf sogar 3 Zeilen machen
-                            line2 = question[60:len(question)]
+                        if len(question) > 60:  # TODO 60 as variable
+                            spaces = [m.start() for m in re.finditer(' ', question.strip(" "))]  # Find all spaces
+                            print spaces
+                            line1_end = max(
+                                [s for s in spaces if s <= 60]) + 1  # Last space which index is less than 60
+                            print line1_end
+                            line1 = question[0:line1_end]  # Zeilenumbruch zu machen, ggf sogar 3 Zeilen machen
+                            line2 = question[line1_end:len(question)]
                             dv.text((220, y - 15), line1, font=fnt, fill=(0, 0, 0))
                             dv.text((220, y + 15), line2, font=fnt, fill=(0, 0, 0))
                         else:
