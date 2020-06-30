@@ -25,7 +25,7 @@ def validate_questions():
             question_id = entry[0]
             question = entry[1]
             if len(question) > 60:
-                print "\033[91mError: ID: " + str(question_id) + " is to long! \033[0m" + question
+                print "\033[91mError: ID: " + str(question_id) + " is to long! Cards will be ugly! \033[0m" + question
             if question[-1] != "?":
                 if question[-1] == " ":
                     print "\033[93mWarning: ID: " + str(
