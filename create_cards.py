@@ -4,6 +4,8 @@ import shutil
 import sqlite3
 
 from PIL import ImageFont, Image, ImageDraw
+
+from constants import QUESTION_MAX_LINE_LENGTH
 from database_statistics import count_questions, get_categories_from_file
 
 
@@ -68,11 +70,11 @@ def create_cards():
                         question = question_row[
                             1].strip()  # Get question and remove possible whitespace after questionsmark
                         answer = question_row[2]
-                        if len(question) > 60:  # TODO 60 as variable
+                        if len(question) > QUESTION_MAX_LINE_LENGTH:
                             spaces = [m.start() for m in re.finditer(' ', question.strip(" "))]  # Find all spaces
                             print spaces
                             line1_end = max(
-                                [s for s in spaces if s <= 60]) + 1  # Last space which index is less than 60
+                                [s for s in spaces if s <= QUESTION_MAX_LINE_LENGTH]) + 1  # Last space which index is less than 60
                             print line1_end
                             line1 = question[0:line1_end]  # Zeilenumbruch zu machen, ggf sogar 3 Zeilen machen
                             line2 = question[line1_end:len(question)]

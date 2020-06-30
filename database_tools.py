@@ -6,6 +6,7 @@
 import sqlite3
 
 import database_statistics
+from constants import QUESTION_MAX_LINE_LENGTH
 
 
 def create_connection(db_file):
@@ -30,8 +31,8 @@ def validate_questions():
             question_id = entry[0]
             question = entry[1]
             any_error = False
-            if len(question) > 120:
-                print "\033[91mError: Question of entry with ID: " + str(question_id) + " is to long! Cards will be ugly! \033[0m" + question
+            if len(question) > 2 * QUESTION_MAX_LINE_LENGTH: #TODO beim Split koennte zweite Zeile laenger als 1 x QUESTION_MAX_LINE_LENGTH werden
+                print "\033[91mError: Question of entry with ID: " + str(question_id) + " is to long! Cards will be ugly! \033[0m" + question + " \033[91mHas length: " + str(len(question)) + "/" + str(2 * QUESTION_MAX_LINE_LENGTH)+"\033[0m" # TODO Variable for max length
                 error_count = error_count + 1
                 any_error = True
             if question[-1] != "?":
@@ -50,7 +51,7 @@ def validate_questions():
         return (warning_count, error_count)
 
 
-def validate_answers():
+def validate_answers(): # TODO  In der Laenge der Antworten das Zitat herausrechnen, bei allen Kategorien ausser T
     print "Validating answer entries..."
     conn = create_connection("python_sqlite.db")
     with conn:
@@ -63,8 +64,8 @@ def validate_answers():
             answer = entry[1]
             answer_cat = entry[2]
             any_error = False
-            if len(answer.split("(")[0]) > 60:
-                print "\033[91mError: Answer of entry with ID: " + str(answer_id) + " is to long! Cards will be ugly! \033[0m" + answer
+            if len(answer.split("(")[0]) > QUESTION_MAX_LINE_LENGTH:
+                print "\033[91mError: Answer of entry with ID: " + str(answer_id) + " is to long! Cards will be ugly! \033[0m" + answer+ " \033[91mHas length: " + str(len(answer)) + "/60\033[0m" # TODO Variable for max length
                 error_count = error_count + 1
                 any_error = True
             if answer_cat != "T" and (

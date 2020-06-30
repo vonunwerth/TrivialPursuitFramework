@@ -11,7 +11,11 @@ raw_input("Press \033[1mENTER\033[0m to start adding new questions from ./questi
           "Already inserted questions will be ignored (The questions text must be unique.)")
 qtb.questions_to_database()
 raw_input("Press \033[1mENTER\033[0m to start validating the database.")
-if dt.validate_questions() == 0 and dt.validate_answers() == 0 and dt.validate_categories() == 0:
+error_count = 0
+error_count += dt.validate_questions()[1]
+error_count += dt.validate_answers()[1]
+error_count += dt.validate_categories()[1]
+if error_count == 0:
     raw_input("Press \033[1mENTER\033[0m to continue and show available statistics on how much cards can be created.")
     dbs.database_statistics()
     raw_input("Press \033[1mENTER\033[0m to create questions cards (front and back) in the ./out folder")
@@ -22,4 +26,5 @@ if dt.validate_questions() == 0 and dt.validate_answers() == 0 and dt.validate_c
     pc.print_cards()
     print "Congratulations. You can find the result in ./prints."
 else:
+    print "There are " + str(error_count) + " Errors which have to be fixed to continue."
     print "Card creation aborted. Please fix the errors in your database and start again."
