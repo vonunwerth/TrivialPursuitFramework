@@ -1,6 +1,6 @@
 C: Characters
-S: Species
 T: Trivia
+S: Species
 V: Voyager
 G: History
 M: Missions

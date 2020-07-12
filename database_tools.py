@@ -3,10 +3,10 @@
 # TODO Check length of questions and answer is not to long
 # TODO Check each Question has valid category
 # TODO function which can repair corrupted entries
-import sqlite3
+import sqlite3 #TODO run database tools on txt before inserting to database
 
 import database_statistics
-from constants import QUESTION_MAX_LINE_LENGTH
+from constants import ANSWER_MAX_LINE_LENGTH, QUESTION_MAX_LINE_LENGTH
 
 
 def create_connection(db_file):
@@ -24,34 +24,37 @@ def validate_questions():
     with conn:
         cur = conn.cursor()
         cur.execute("SELECT id,question FROM qac ORDER BY id")
-
         error_count = 0
         warning_count = 0
         for entry in cur.fetchall():
             question_id = entry[0]
             question = entry[1]
-            any_error = False
-            if len(question) > 2 * QUESTION_MAX_LINE_LENGTH: #TODO beim Split koennte zweite Zeile laenger als 1 x QUESTION_MAX_LINE_LENGTH werden
-                print "\033[91mError: Question of entry with ID: " + str(question_id) + " is to long! Cards will be ugly! \033[0m" + question + " \033[91mHas length: " + str(len(question)) + "/" + str(2 * QUESTION_MAX_LINE_LENGTH)+"\033[0m" # TODO Variable for max length
+            any_error = False #TODO naming any_error_or_warning?
+            if len(
+                    question) > 3 * QUESTION_MAX_LINE_LENGTH:  # TODO beim Split koennte zweite Zeile laenger als 1 x QUESTION_MAX_LINE_LENGTH werden
+                print "\033[91mError: Question of entry with ID: " + str(
+                    question_id) + " is to long! Cards will be ugly! \033[0m" + question + " \033[91mHas length: " + str(
+                    len(question)) + "/" + str(3 * QUESTION_MAX_LINE_LENGTH) + "\033[0m"
                 error_count = error_count + 1
                 any_error = True
-            if question[-1] != "?":
+            if question[-1] != "?" and question[-3:] != "...": # Question mark or citing ...s are missing
                 any_error = True
-                warning_count = warning_count + 1
+                warning_count = warning_count + 1 #
                 if question[-1] == " ":
                     print "\033[93mWarning: Question of entry with ID: " + str(
                         question_id) + " has spaces attached to the back. \033[0m" + question
                 else:
-                    print "\033[93mWarning: Question of entry with ID: " + str(question_id) + " has not a ? as last symbol! \033[0m" + question
+                    print "\033[93mWarning: Question of entry with ID: " + str(
+                        question_id) + " has not a ? or ... as last symbol! \033[0m" + question
             if any_error:
                 print("")  # Organize Errors and Warnings in blocks grouped by id
 
         print "\033[1mQuestion-Report\n\033[0m\033[91m  Errors found: \033[0m\033[1m" + str(
             error_count) + "\n \033[0m\033[93m Warnings found: \033[0m\033[1m" + str(warning_count) + "\033[0m\n"
-        return (warning_count, error_count)
+        return warning_count, error_count
 
 
-def validate_answers(): # TODO  In der Laenge der Antworten das Zitat herausrechnen, bei allen Kategorien ausser T
+def validate_answers():  # TODO  In der Laenge der Antworten das Zitat herausrechnen, bei allen Kategorien ausser T
     print "Validating answer entries..."
     conn = create_connection("python_sqlite.db")
     with conn:
@@ -64,12 +67,20 @@ def validate_answers(): # TODO  In der Laenge der Antworten das Zitat herausrech
             answer = entry[1]
             answer_cat = entry[2]
             any_error = False
-            if len(answer.split("(")[0]) > QUESTION_MAX_LINE_LENGTH:
-                print "\033[91mError: Answer of entry with ID: " + str(answer_id) + " is to long! Cards will be ugly! \033[0m" + answer+ " \033[91mHas length: " + str(len(answer)) + "/60\033[0m" # TODO Variable for max length
+            if len(answer.split("(")[0]) > 2 * ANSWER_MAX_LINE_LENGTH: # if both lines of the answer are to long in sum
+                print "\033[91mError: Answer of entry with ID: " + str(
+                    answer_id) + " is too long! Cards will be ugly! \033[0m" + answer.split("(")[0] + " \033[91mHas length: " + str(
+                    len(answer.split("(")[0])) + "/" + str(2 * ANSWER_MAX_LINE_LENGTH) + "\033[0m"  # TODO Variable for max length
                 error_count = error_count + 1
                 any_error = True
-            if answer_cat != "T" and (
-                    answer.find("(") < 0 or answer.find(")") < 0):  # TODO just for this Star Trek thingy thing
+            if len(answer.split("(")) > 1:
+                if len("(" + answer.split("(")[1]) > ANSWER_MAX_LINE_LENGTH: # if citation line is too long
+                    print "\033[91mError: Citation of entry with ID: " + str(
+                        answer_id) + " is too long! Cards will be ugly! \033[0m" + "(" + answer.split("(")[1] + " \033[91mHas length: " + str(
+                        len("(" + answer.split("(")[1])) + "/" + str(ANSWER_MAX_LINE_LENGTH) + "\033[0m"  # TODO Variable for max length
+                    error_count = error_count + 1
+                    any_error = True
+            if answer_cat != "T" and (answer.find("(") < 0 or answer.find(")") < 0):  # TODO just for this Star Trek thingy thing
                 any_error = True
                 warning_count = warning_count + 1
                 print "\033[93mWarning: Answer of entry with ID: " + str(
@@ -79,7 +90,7 @@ def validate_answers(): # TODO  In der Laenge der Antworten das Zitat herausrech
 
         print "\033[1mAnswer-Report\n\033[0m\033[91m  Errors found: \033[0m\033[1m" + str(
             error_count) + "\n \033[0m\033[93m Warnings found: \033[0m\033[1m" + str(warning_count) + "\033[0m\n"
-        return (warning_count, error_count)
+        return warning_count, error_count
 
 
 def validate_categories():
@@ -105,7 +116,7 @@ def validate_categories():
 
         print "\033[1mCategory-Report\n\033[0m\033[91m  Errors found: \033[0m\033[1m" + str(
             error_count) + "\n \033[0m\033[93m Warnings found: \033[0m\033[1m" + str(warning_count) + "\033[0m\n"
-        return (warning_count, error_count)
+        return warning_count, error_count
 
 
 if __name__ == '__main__':
