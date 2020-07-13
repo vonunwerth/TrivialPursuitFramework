@@ -2,10 +2,11 @@ import os
 import re
 import shutil
 import sqlite3
+from random import shuffle
 
 from PIL import ImageFont, Image, ImageDraw
 
-from constants import QUESTION_MAX_LINE_LENGTH, ANSWER_MAX_LINE_LENGTH
+from constants import QUESTION_MAX_LINE_LENGTH, ANSWER_MAX_LINE_LENGTH, NEXT_QUESTION_Y_SKIP, SHUFFLE
 from database_statistics import count_questions, get_categories_from_file
 
 
@@ -50,7 +51,10 @@ def get_questions_of_categoriy(conn, category):
     """
     cur = conn.cursor()
     cur.execute("SELECT * FROM qac WHERE category=?", category)
-    return cur.fetchall()  # Could also use dict_factory
+    question_rows = cur.fetchall()
+    if SHUFFLE:
+        shuffle(question_rows) # Shuffle questions, so that there is no order recognizable, otherwise ordered by id
+    return question_rows # could also use dict_factory, but indexes are ok here
 
 
 def create_cards():
@@ -77,7 +81,7 @@ def create_cards():
             for category in categories:  # For each category
                 print category
                 questions = get_questions_of_categoriy(conn,
-                                                       category)  # Get all questions of those category from database # TODO Mix
+                                                       category)  # Get all questions of those category from database
                 for question_row in questions:  # question_row[ ] represents one question 0 - ID, 1 - question, 2 - answer, 3 - category
                     print question_row  # print full question_row
                     if (question_row[0] in used_ids) and (
@@ -86,8 +90,12 @@ def create_cards():
                         print str(count_questions(conn) - 6 * (
                                 card_count - 1)) + " Questions have been ignored. (Due to inapplicable categories)"
                         print "No more questions available to fill new card!"  # TODO Print size
+                        print "Questions with the following id's were skipped: "
+                        for id in used_ids:
+                            print id
                         return  # End scipt - cards have been created
                     if question_row[0] not in used_ids:  # if there is a not used question
+
                         used_ids.append(question_row[0])  # append to used list
                         question = question_row[
                             1].strip()  # Get question and remove possible whitespace after questionsmark
@@ -130,7 +138,7 @@ def create_cards():
                         else:  # if there is just a line
                             dh.text((620, y), answer_lines[0], font=fnt, fill=(0, 0, 0))  # Place the answer at y
 
-                        y = y + 103  # go to the next question # TODO as variable
+                        y = y + NEXT_QUESTION_Y_SKIP  # go to the next question
                         break
 
             vorne.save(

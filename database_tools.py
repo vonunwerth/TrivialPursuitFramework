@@ -1,7 +1,3 @@
-# TODO Cleanup database, manual unique check, etc.
-# TODO check if every question ends with a question mark
-# TODO Check length of questions and answer is not to long
-# TODO Check each Question has valid category
 # TODO function which can repair corrupted entries
 import sqlite3 #TODO run database tools on txt before inserting to database
 
@@ -29,16 +25,16 @@ def validate_questions():
         for entry in cur.fetchall():
             question_id = entry[0]
             question = entry[1]
-            any_error = False #TODO naming any_error_or_warning?
+            any_error_or_warning = False
             if len(
-                    question) > 3 * QUESTION_MAX_LINE_LENGTH:  # TODO beim Split koennte zweite Zeile laenger als 1 x QUESTION_MAX_LINE_LENGTH werden
+                    question) > 3 * QUESTION_MAX_LINE_LENGTH:
                 print "\033[91mError: Question of entry with ID: " + str(
                     question_id) + " is to long! Cards will be ugly! \033[0m" + question + " \033[91mHas length: " + str(
                     len(question)) + "/" + str(3 * QUESTION_MAX_LINE_LENGTH) + "\033[0m"
                 error_count = error_count + 1
-                any_error = True
+                any_error_or_warning = True
             if question[-1] != "?" and question[-3:] != "...": # Question mark or citing ...s are missing
-                any_error = True
+                any_error_or_warning = True
                 warning_count = warning_count + 1 #
                 if question[-1] == " ":
                     print "\033[93mWarning: Question of entry with ID: " + str(
@@ -46,7 +42,7 @@ def validate_questions():
                 else:
                     print "\033[93mWarning: Question of entry with ID: " + str(
                         question_id) + " has not a ? or ... as last symbol! \033[0m" + question
-            if any_error:
+            if any_error_or_warning:
                 print("")  # Organize Errors and Warnings in blocks grouped by id
 
         print "\033[1mQuestion-Report\n\033[0m\033[91m  Errors found: \033[0m\033[1m" + str(
@@ -54,7 +50,7 @@ def validate_questions():
         return warning_count, error_count
 
 
-def validate_answers():  # TODO  In der Laenge der Antworten das Zitat herausrechnen, bei allen Kategorien ausser T
+def validate_answers():
     print "Validating answer entries..."
     conn = create_connection("python_sqlite.db")
     with conn:
@@ -66,26 +62,26 @@ def validate_answers():  # TODO  In der Laenge der Antworten das Zitat herausrec
             answer_id = entry[0]
             answer = entry[1]
             answer_cat = entry[2]
-            any_error = False
+            any_error_or_warning = False
             if len(answer.split("(")[0]) > 2 * ANSWER_MAX_LINE_LENGTH: # if both lines of the answer are to long in sum
                 print "\033[91mError: Answer of entry with ID: " + str(
                     answer_id) + " is too long! Cards will be ugly! \033[0m" + answer.split("(")[0] + " \033[91mHas length: " + str(
                     len(answer.split("(")[0])) + "/" + str(2 * ANSWER_MAX_LINE_LENGTH) + "\033[0m"  # TODO Variable for max length
                 error_count = error_count + 1
-                any_error = True
+                any_error_or_warning = True
             if len(answer.split("(")) > 1:
                 if len("(" + answer.split("(")[1]) > ANSWER_MAX_LINE_LENGTH: # if citation line is too long
                     print "\033[91mError: Citation of entry with ID: " + str(
                         answer_id) + " is too long! Cards will be ugly! \033[0m" + "(" + answer.split("(")[1] + " \033[91mHas length: " + str(
                         len("(" + answer.split("(")[1])) + "/" + str(ANSWER_MAX_LINE_LENGTH) + "\033[0m"  # TODO Variable for max length
                     error_count = error_count + 1
-                    any_error = True
+                    any_error_or_warning = True
             if answer_cat != "T" and (answer.find("(") < 0 or answer.find(")") < 0):  # TODO just for this Star Trek thingy thing
-                any_error = True
+                any_error_or_warning = True
                 warning_count = warning_count + 1
                 print "\033[93mWarning: Answer of entry with ID: " + str(
                     answer_id) + " is missing correct citation and is not of category: Trivia \033[0m" + answer  # TODO not everyone will use citations!
-            if any_error:
+            if any_error_or_warning:
                 print("")  # Organize Errors and Warnings in blocks grouped by id
 
         print "\033[1mAnswer-Report\n\033[0m\033[91m  Errors found: \033[0m\033[1m" + str(
@@ -105,13 +101,13 @@ def validate_categories():
             question_id = entry[0]
             question = entry[1]
             category = entry[2]
-            any_error = False
+            any_error_or_warning = False
             if category not in database_statistics.get_categories_from_file()[0]:
-                any_error = True
+                any_error_or_warning = True
                 error_count = error_count + 1
                 print "\033[91mError: Category of entry with ID: " + str(
                     question_id) + " is missing a correct category \033[0m Current Category: " + category
-            if any_error:
+            if any_error_or_warning:
                 print("")  # Organize Errors and Warnings in blocks grouped by id
 
         print "\033[1mCategory-Report\n\033[0m\033[91m  Errors found: \033[0m\033[1m" + str(

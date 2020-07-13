@@ -40,7 +40,7 @@ def questions_to_database():
         if line.find("C: ") >= 0:
             category = (line.split("C: ")[1].split("\r\n")[0])
             qac_counter = qac_counter + 1
-        if qac_counter == 3:  # TODO suhffle all questions, that those that are behind each other in the txt are not
+        if qac_counter == 3:
             # on the same card # TODO Verify all questions have a category and are with short enough size etc!
             with conn:  # Transaction
                 try:
