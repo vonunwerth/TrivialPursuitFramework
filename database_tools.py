@@ -72,6 +72,7 @@ def validate_answers():
         for entry in cur.fetchall():
             answer_id = entry[0]
             answer = entry[1]
+            answer_cat = entry[2]
             any_error_or_warning = False
             if len(answer.split("(")[0]) > 2 * ANSWER_MAX_LINE_LENGTH:  # if both lines of the answer are to long in sum
                 print "\033[91mError: Answer of entry with ID: " + str(
@@ -90,6 +91,12 @@ def validate_answers():
                         ANSWER_MAX_LINE_LENGTH) + "\033[0m"
                     error_count = error_count + 1
                     any_error_or_warning = True
+            if answer_cat != "T" and (
+                    answer.find("(") < 0 or answer.find(")") < 0):
+                any_error_or_warning = True
+                warning_count = warning_count + 1
+                print "\033[93mWarning: Answer of entry with ID: " + str(
+                    answer_id) + " is missing correct citation and is not of category: Trivia \033[0m" + answer
             if any_error_or_warning:
                 print("")  # Organize Errors and Warnings in blocks grouped by id
 
