@@ -22,7 +22,7 @@ def create_connection(db_file):
         print(e)
 
 
-def split_lines(text, line_length):
+def split_lines(text, line_length): # TODO also split at "-"
     """
     Split a text in mutliple lines at " " and returns the lines as list
     :param text: Text to be split
@@ -91,8 +91,9 @@ def create_cards():
                                 card_count - 1)) + " Questions have been ignored. (Due to inapplicable categories)"
                         print "No more questions available to fill new card!"  # TODO Print size
                         print "Questions with the following id's were skipped: "
-                        for id in used_ids:
-                            print id
+                        used_ids.sort()
+                        for q_id in used_ids:
+                            print q_id
                         return  # End scipt - cards have been created
                     if question_row[0] not in used_ids:  # if there is a not used question
 
