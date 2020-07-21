@@ -21,7 +21,8 @@ if error_count == 0:
     raw_input("Press \033[1mENTER\033[0m to create questions cards (front and back) in the ./out folder")
     cc.create_cards()
     raw_input(
-        "Press \033[1mENTER\033[0m to create printable sheets with 4 questions card, which can be cut, kinked and glued "
+        "Press \033[1mENTER\033[0m to create printable sheets with 4 questions cards, which can be cut, kinked and "
+        "glued "
         "together.")
     pc.print_cards()
     print "Congratulations. You can find the result in ./prints."

@@ -22,7 +22,7 @@ def create_connection(db_file):
         print(e)
 
 
-def split_lines(text, line_length): # TODO also split at "-"
+def split_lines(text, line_length):
     """
     Split a text in mutliple lines at " " and returns the lines as list
     :param text: Text to be split
@@ -33,10 +33,12 @@ def split_lines(text, line_length): # TODO also split at "-"
     line_ends = [0]  # All line endings, first line has to start at index 0
     spaces = [m.start() for m in re.finditer(' ', text.strip(" "))]  # Find all spaces an write indexes to a list
     spaces.append(len(
-        text))  # Append end of text to allow last line go to end of the last word, not the one before the last (the last space)
+        text))  # Append end of text to allow last line go to end of the last word, not the one before the last (the
+    # last space)
     for i in range(1, int(len(text) / line_length) + 2):  # For how much lines there have to be
         line_ends.append(max([s for s in spaces if
-                              s <= i * line_length]) + 1)  # Last space which index is less than QUESTION_MAX_LINE_LENGTH
+                              s <= i * line_length]) + 1)  # Last space which index is less than
+        # QUESTION_MAX_LINE_LENGTH
         lines.append(text[line_ends[i - 1]:line_ends[
             i]])  # Append line starting at last line_ends entry and going to line_ends[i]
     return lines
@@ -53,8 +55,8 @@ def get_questions_of_categoriy(conn, category):
     cur.execute("SELECT * FROM qac WHERE category=?", category)
     question_rows = cur.fetchall()
     if SHUFFLE:
-        shuffle(question_rows) # Shuffle questions, so that there is no order recognizable, otherwise ordered by id
-    return question_rows # could also use dict_factory, but indexes are ok here
+        shuffle(question_rows)  # Shuffle questions, so that there is no order recognizable, otherwise ordered by id
+    return question_rows  # could also use dict_factory, but indexes are ok here
 
 
 def create_cards():
@@ -70,26 +72,26 @@ def create_cards():
     fnt = ImageFont.truetype("arial.ttf", 25)
     with conn:  # Keep connection open, as long as necessary
         categories, categories_long = get_categories_from_file()  # get categories and long name
-        # TODO Write categories on blank front, back in the program in own method
         card_count = 1
         while True:
-            vorne = Image.open("assets/front_cat.png")  # Load assets
-            hinten = Image.open("assets/back_cat.png")
-            dv = ImageDraw.Draw(vorne)
-            dh = ImageDraw.Draw(hinten)
+            front = Image.open("assets/front.png")  # Load assets
+            back = Image.open("assets/back.png")
+            dv = ImageDraw.Draw(front)
+            dh = ImageDraw.Draw(back)
             y = 100
             for category in categories:  # For each category
                 print category
                 questions = get_questions_of_categoriy(conn,
                                                        category)  # Get all questions of those category from database
-                for question_row in questions:  # question_row[ ] represents one question 0 - ID, 1 - question, 2 - answer, 3 - category
+                for question_row in questions:  # question_row[ ] represents one question 0 - ID, 1 - question,
+                    # 2 - answer, 3 - category
                     print question_row  # print full question_row
                     if (question_row[0] in used_ids) and (
                             questions.index(question_row) == (len(questions) - 1)):  # if no new question was found
                         print "\nSuccessfully created " + str(card_count - 1) + " cards. Those can be found in ./out"
                         print str(count_questions(conn) - 6 * (
                                 card_count - 1)) + " Questions have been ignored. (Due to inapplicable categories)"
-                        print "No more questions available to fill new card!"  # TODO Print size
+                        print "No more questions available to fill new card!"
                         print "Questions with the following id's were skipped: "
                         used_ids.sort()
                         for q_id in used_ids:
@@ -117,11 +119,12 @@ def create_cards():
                                     fill=(0, 0, 0))  # Align the line in the middle (at y)
 
                         answer_lines = split_lines(answer.split("(")[0],
-                                                   ANSWER_MAX_LINE_LENGTH)  # Max. 2 lines (because of answer checker in database_tools), Citation will be rendered in a own line
+                                                   ANSWER_MAX_LINE_LENGTH)  # Max. 2 lines (because of answer checker
+                        # in database_tools), Citation will be rendered in it's own line
 
                         citation_exists = False
                         if len(answer.split("(")) > 1:  # append citation if there is one
-                            citation = answer.split("(")[1]  # TODO split citation in own column in database
+                            citation = answer.split("(")[1]
                             answer_lines.append(citation)
                             citation_exists = True
                         if len(answer_lines) == 3:  # if there are two lines and a citation
@@ -132,19 +135,19 @@ def create_cards():
                         elif len(answer_lines) == 2:  # if there is just one line and a citation (a split was done)
                             dh.text((620, y - 15), answer_lines[0], font=fnt,
                                     fill=(0, 0, 0))  # Align the line a the citation to y
-                            if citation_exists: # 2nd line can be citation or just a second line
+                            if citation_exists:  # 2nd line can be citation or just a second line
                                 dh.text((620, y + 15), "(" + answer_lines[1], font=fnt, fill=(0, 0, 0))
                             else:
-                                dh.text((620, y + 15), answer_lines[1], font=fnt,fill=(0, 0, 0))
+                                dh.text((620, y + 15), answer_lines[1], font=fnt, fill=(0, 0, 0))
                         else:  # if there is just a line
                             dh.text((620, y), answer_lines[0], font=fnt, fill=(0, 0, 0))  # Place the answer at y
 
                         y = y + NEXT_QUESTION_Y_SKIP  # go to the next question
                         break
 
-            vorne.save(
+            front.save(
                 "./out/front" + str(card_count) + ".png")  # save front and back of the card with texts written on it
-            hinten.save("./out/back" + str(card_count) + ".png")
+            back.save("./out/back" + str(card_count) + ".png")
             card_count = card_count + 1
 
 

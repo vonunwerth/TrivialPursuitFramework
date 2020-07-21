@@ -2,9 +2,12 @@ import codecs
 import sqlite3
 
 
-# https://www.sqlitetutorial.net/sqlite-python/sqlite-python-select/
 def create_connection(db_file):
-    """ create a database connection to a SQLite database """
+    """
+    Create a database connection to a SQLite database
+    :param db_file: SQLite file containing the database
+    :return: Connection
+    """
     try:
         connection = sqlite3.connect(db_file)
         return connection
@@ -13,18 +16,33 @@ def create_connection(db_file):
 
 
 def count_categories(conn, category):
+    """
+    Count questions of the given category
+    :param conn: Connection to the database
+    :param category: Wished category
+    :return: Count of questions of category
+    """
     cur = conn.cursor()
     cur.execute("SELECT COUNT(id) FROM qac WHERE category=?", category)
     return cur.fetchall()
 
 
 def count_questions(conn):
+    """
+    Count all questions
+    :param conn: Connection to the database
+    :return: Just the number of all questions
+    """
     cur = conn.cursor()
     cur.execute("SELECT COUNT(id) FROM qac")
     return cur.fetchall()[0][0]
 
 
 def get_categories_from_file():
+    """
+    Reads the category string from the categories.txt file
+    :return: Tupel (Categories one letter, Category long name)
+    """
     cat = []
     cat_long = []
     f = codecs.open("questions/categories.txt", "r", "utf-8")
@@ -35,6 +53,10 @@ def get_categories_from_file():
 
 
 def database_statistics():
+    """
+    Generates interesting statistics about questions count, database entries, ...
+    :return: Successfull execution
+    """
     conn = create_connection("python_sqlite.db")
     categories, categories_long = get_categories_from_file()
     with conn:

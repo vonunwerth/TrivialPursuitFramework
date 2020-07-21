@@ -1,4 +1,3 @@
-# TODO different paper formats?! variable for x times x cards on same sheet
 from PIL import Image
 
 

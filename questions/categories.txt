@@ -1,6 +1,6 @@
-C: Characters
-T: Trivia
-S: Species
-V: Voyager
-G: History
-M: Missions
+H: History
+G: Geopraphy
+P: Politics
+A: Actors
+I: Inventions
+M: Mathematics
