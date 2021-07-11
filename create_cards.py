@@ -89,7 +89,8 @@ def create_cards():
         question_database = {}
         for category in categories:
             question_database[category] = get_questions_of_category(conn,
-                                                      category)  # Get all questions of those category from database before the loop because so they were just shuffled once
+                                                                    category)
+            # Get all questions of those category from database before the loop because so they were just shuffled once
         while True:
             front = Image.open("assets/front.png")  # Load assets
             back = Image.open("assets/back.png")
@@ -101,7 +102,7 @@ def create_cards():
                 print(category)
                 questions = question_database[category]
 
-                if (len(questions) == 0):  # if no new question was found
+                if len(questions) == 0:  # if no new question was found
                     print("\nSuccessfully created " + str(card_count - 1) + " cards. Those can be found in ./out")
                     print(str(count_questions(conn) - 6 * (
                             card_count - 1)) + " Questions have been ignored. (Due to inapplicable categories)")
@@ -119,7 +120,7 @@ def create_cards():
                 for question_row in questions:  # question_row[ ] represents one question 0 - ID, 1 - question,
                     # 2 - answer, 3 - category
                     print(question_row)  # print full question_row
-                    if (question_row[0] not in used_ids):  # if there is a not yet used question which have to be processed
+                    if question_row[0] not in used_ids:  # if there is a not yet used question which have to be processed
 
                         used_ids.append(question_row[0])  # append to used list
                         used_ids_for_current_card.append(question_row[0])
@@ -167,7 +168,7 @@ def create_cards():
                             dh.text((620, y), answer_lines[0], font=fnt, fill=(0, 0, 0))  # Place the answer at y
 
                         y = y + NEXT_QUESTION_Y_SKIP  # go to the next question
-                        break # a new question is added, break and continue with the next category
+                        break  # a new question is added, break and continue with the next category
 
             front.save(
                 "./out/front" + str(card_count) + ".png")  # save front and back of the card with texts written on it

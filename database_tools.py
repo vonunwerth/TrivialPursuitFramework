@@ -95,8 +95,8 @@ def validate_answers():
                     answer.find("(") < 0 or answer.find(")") < 0):
                 any_error_or_warning = True
                 warning_count = warning_count + 1
-                print "\033[93mWarning: Answer of entry with ID: " + str(
-                    answer_id) + " is missing correct citation and is not of category: Trivia \033[0m" + answer
+                print("\033[93mWarning: Answer of entry with ID: " + str(
+                    answer_id) + " is missing correct citation and is not of category: Trivia \033[0m" + answer)
             if any_error_or_warning:
                 print("")  # Organize Errors and Warnings in blocks grouped by id
 
