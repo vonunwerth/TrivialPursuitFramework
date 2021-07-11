@@ -55,7 +55,7 @@ def get_categories_from_file():
 def database_statistics():
     """
     Generates interesting statistics about questions count, database entries, ...
-    :return: Successfull execution
+    :return: Successful execution
     """
     conn = create_connection("python_sqlite.db")
     categories, categories_long = get_categories_from_file()
@@ -66,12 +66,12 @@ def database_statistics():
             for row in rows:
                 for number in row:
                     numbers.append(number)
-                    print "There are " + str(number) + " questions of category " + categories_long[
-                        categories.index(category)]
-        print "\n" + str(min(numbers)) + " complete question cards can be created.."
-        print "It exist " + str(count_questions(conn)) + " Questions."
-        print str(count_questions(conn) - 6 * (
-            min(numbers))) + " Questions will be ignored. (Due to inapplicable categories)"
+                    print("There are " + str(number) + " questions of category " + categories_long[
+                        categories.index(category)])
+        print("\n" + str(min(numbers)) + " complete question cards can be created..")
+        print("It exist " + str(count_questions(conn)) + " Questions.")
+        print(str(count_questions(conn) - 6 * (
+            min(numbers))) + " Questions will be ignored. (Due to inapplicable categories)")
 
 
 if __name__ == '__main__':

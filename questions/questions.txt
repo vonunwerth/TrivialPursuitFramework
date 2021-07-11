@@ -22,6 +22,6 @@ Q: Who played Obi-Wan Kenobi in George Lucas legendary space-opera film, Star Wa
 A: Ewan McGregor
 C: A
 
-Q: The 2nd World War lasted from...
+Q: The 2nd World War lasted from ...
 A: 1939 to 1945
 C: H
