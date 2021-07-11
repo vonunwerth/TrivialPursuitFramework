@@ -14,7 +14,7 @@ def create_connection(db_file):
     """
     Establishes a database connection
     :param db_file: File of the database
-    :return: Successfull connection
+    :return: Successful connection
     """
     try:
         return sqlite3.connect(db_file)
@@ -24,7 +24,7 @@ def create_connection(db_file):
 
 def split_lines(text, line_length):
     """
-    Split a text in mutliple lines at " " and returns the lines as list
+    Split a text in multiple lines at " " and returns the lines as list
     :param text: Text to be split
     :param line_length: Maximum length of each line
     :return: List with all lines
@@ -44,7 +44,7 @@ def split_lines(text, line_length):
     return lines
 
 
-def get_questions_of_categoriy(conn, category):
+def get_questions_of_category(conn, category):
     """
     Gets all questions of a category from the database
     :param conn: Database connection
@@ -57,6 +57,18 @@ def get_questions_of_categoriy(conn, category):
     if SHUFFLE:
         shuffle(question_rows)  # Shuffle questions, so that there is no order recognizable, otherwise ordered by id
     return question_rows  # could also use dict_factory, but indexes are ok here
+
+
+def get_question_ids(conn):
+    """
+    Gets all ids of the questions in the database
+    :param conn: Database connection
+    :return: List of ids
+    """
+    cur = conn.cursor()
+    cur.execute("SELECT id FROM qac")
+    ids = [item[0] for item in cur.fetchall()]
+    return ids
 
 
 def create_cards():
@@ -73,35 +85,47 @@ def create_cards():
     with conn:  # Keep connection open, as long as necessary
         categories, categories_long = get_categories_from_file()  # get categories and long name
         card_count = 1
+
+        question_database = {}
+        for category in categories:
+            question_database[category] = get_questions_of_category(conn,
+                                                      category)  # Get all questions of those category from database before the loop because so they were just shuffled once
         while True:
             front = Image.open("assets/front.png")  # Load assets
             back = Image.open("assets/back.png")
             dv = ImageDraw.Draw(front)
             dh = ImageDraw.Draw(back)
             y = 100
+            used_ids_for_current_card = []
             for category in categories:  # For each category
-                print category
-                questions = get_questions_of_categoriy(conn,
-                                                       category)  # Get all questions of those category from database
+                print(category)
+                questions = question_database[category]
+
+                if (len(questions) == 0):  # if no new question was found
+                    print("\nSuccessfully created " + str(card_count - 1) + " cards. Those can be found in ./out")
+                    print(str(count_questions(conn) - 6 * (
+                            card_count - 1)) + " Questions have been ignored. (Due to inapplicable categories)")
+                    print("No more questions available to fill new card!")
+                    print(
+                        "Questions with the following id's were skipped: ")
+
+                    used_ids = [item for item in used_ids if item not in used_ids_for_current_card]
+                    used_ids.sort()
+                    unused_used_cut = [item for item in get_question_ids(conn) if item not in used_ids]
+                    for q_id in unused_used_cut:
+                        print(q_id)
+                    return  # End script - cards have been created
+
                 for question_row in questions:  # question_row[ ] represents one question 0 - ID, 1 - question,
                     # 2 - answer, 3 - category
-                    print question_row  # print full question_row
-                    if (question_row[0] in used_ids) and (
-                            questions.index(question_row) == (len(questions) - 1)):  # if no new question was found
-                        print "\nSuccessfully created " + str(card_count - 1) + " cards. Those can be found in ./out"
-                        print str(count_questions(conn) - 6 * (
-                                card_count - 1)) + " Questions have been ignored. (Due to inapplicable categories)"
-                        print "No more questions available to fill new card!"
-                        print "Questions with the following id's were skipped: "
-                        used_ids.sort()
-                        for q_id in used_ids:
-                            print q_id
-                        return  # End scipt - cards have been created
-                    if question_row[0] not in used_ids:  # if there is a not used question
+                    print(question_row)  # print full question_row
+                    if (question_row[0] not in used_ids):  # if there is a not yet used question which have to be processed
 
                         used_ids.append(question_row[0])  # append to used list
+                        used_ids_for_current_card.append(question_row[0])
+                        question_database[category].remove(question_row)
                         question = question_row[
-                            1].strip()  # Get question and remove possible whitespace after questionsmark
+                            1].strip()  # Get question and remove possible whitespace after question mark
                         answer = question_row[2]  # Get answer of the question_row
 
                         question_lines = split_lines(question, QUESTION_MAX_LINE_LENGTH)
@@ -143,7 +167,7 @@ def create_cards():
                             dh.text((620, y), answer_lines[0], font=fnt, fill=(0, 0, 0))  # Place the answer at y
 
                         y = y + NEXT_QUESTION_Y_SKIP  # go to the next question
-                        break
+                        break # a new question is added, break and continue with the next category
 
             front.save(
                 "./out/front" + str(card_count) + ".png")  # save front and back of the card with texts written on it

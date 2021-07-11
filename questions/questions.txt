@@ -1,7 +1,27 @@
-Q: What is the name of the first president of the United States of America
+Q: What is the name of the first president of the United States of America?
 A: George Washington
 C: H
 
 Q: What is the longest river on earth called?
-A: Nile
+A: Nile (6650 km, Wikipedia)
 C: G
+
+Q: What does NATO stand for?
+A: North Atlantic Treaty Organization
+C: P
+
+Q: Who invented the first car
+A: Karl Benz
+C: I
+
+Q: What can be found using the Sieve of Eratosthenes?
+A: Prime numbers
+C: M
+
+Q: Who played Obi-Wan Kenobi in George Lucas legendary space-opera film, Star Wars: Episode 1 - The Phantom Menace released in May 1999?
+A: Ewan McGregor
+C: A
+
+Q: The 2nd World War lasted from ...
+A: 1939 to 1945
+C: H
